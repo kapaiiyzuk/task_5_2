@@ -37,6 +37,16 @@
         <label>Email:</label>
         <input type="email" th:field="*{email}" required/>
     </div>
+    <div>
+        <label>Roles:</label>
+        <select name="roleNames" multiple size="2">
+            <option th:each="r : ${roles}"
+                    th:value="${r.name}"
+                    th:text="${r.name.replace('ROLE_','')}"
+                    th:selected="${user.roles != null and user.roles.![name].contains(r.name)}">
+            </option>
+        </select>
+    </div>
     <br>
     <button type="submit">Save</button>
     <a th:href="@{/admin/users}">Cancel</a>

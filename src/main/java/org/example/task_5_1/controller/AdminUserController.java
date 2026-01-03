@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/admin/users")
 public class AdminUserController {
@@ -21,16 +23,19 @@ public class AdminUserController {
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("user", new User());
+        model.addAttribute("roles", userService.getAllRoles());
         return "user-form";
     }
     @GetMapping("/edit")
     public String showEditForm(@RequestParam("id") Long id, Model model) {
         model.addAttribute("user", userService.getById(id));
+        model.addAttribute("roles", userService.getAllRoles());
         return "user-form";
     }
     @PostMapping("/save")
-    public String saveUser(@ModelAttribute("user") User user) {
-        userService.save(user);
+    public String saveUser(@ModelAttribute("user") User user,
+                           @RequestParam(value = "roleNames", required = false) List<String> roleNames) {
+        userService.save(user, roleNames);
         return "redirect:/admin/users";
     }
     @PostMapping("/delete")
